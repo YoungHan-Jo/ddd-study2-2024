@@ -1,9 +1,7 @@
-import { Module } from "@nestjs/common";
-import { PrismaClientService } from "../common/prismaClient.service";
+import { Module } from '@nestjs/common';
+import { PrismaClientService } from '../common/prismaClient.service';
 
 @Module({
-    providers: [
-        PrismaClientService
-    ],
+  providers: [PrismaClientService],
 })
-export class OrderModule { }
+export class OrderModule {}
