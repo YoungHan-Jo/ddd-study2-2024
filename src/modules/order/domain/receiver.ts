@@ -8,7 +8,7 @@ export class Receiver {
   }
 
   equals(other: Object) {
-    if (other === null) return false
+    if (other === null) return false;
     if (this === other) return true;
     if (!(other instanceof Receiver)) return false;
 

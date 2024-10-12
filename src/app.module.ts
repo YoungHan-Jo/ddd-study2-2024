@@ -13,8 +13,6 @@ import { PrismaClientService } from './modules/common/prismaClient.service';
     OrderModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-  ],
+  providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
