@@ -7,6 +7,8 @@ import { ShippingInfo } from '../../domain/shippingInfo';
 import { Address } from '../../domain/address';
 import { Receiver } from '../../domain/receiver';
 import { Optional } from 'typescript-optional';
+import { MemberId } from '../../domain/memberId';
+import { Orderer } from '../../domain/orderer';
 
 describe('changeOrderService', () => {
   const stubRepo: OrderRepository = {
@@ -16,20 +18,35 @@ describe('changeOrderService', () => {
     delete: jest.fn(),
   };
 
-  const id = randomUUID();
+  const orderId = randomUUID();
+  const ordererId = randomUUID();
+  const ordererName = 'Bob';
+  const shippingMessage = 'message';
+  const shippingAddress1 = 'address1';
+  const shippingAddress2 = 'address2';
+  const shippingZipCode = '111-2222';
   const receiverName = 'Alice';
   const receiverPhoneNumber = '070-1111-2222';
-  const address1 = 'address1';
-  const address2 = 'address2';
-  const zipCode = '111-2222';
 
   const order = new Order({
-    id,
-    receiverName,
-    receiverPhoneNumber,
-    address1,
-    address2,
-    zipCode,
+    id: orderId,
+    orderer: new Orderer({
+      memberId: ordererId,
+      name: ordererName,
+    }),
+    shippingInfo: new ShippingInfo({
+      message: shippingMessage,
+      address: new Address({
+        shippingMessage: shippingMessage,
+        shippingAddress1: shippingAddress1,
+        shippingAddress2: shippingAddress2,
+        shippingZipCode: shippingZipCode,
+      }),
+      receiver: new Receiver({
+        name: receiverName,
+        phoneNumber: receiverPhoneNumber,
+      }),
+    }),
   });
 
   it('changeOrderService', async () => {
@@ -38,6 +55,7 @@ describe('changeOrderService', () => {
       Optional.ofNullable(order),
     );
 
+    const newShippingMessage = 'newMessage';
     const newReceiverName = 'Bob';
     const newReceiverPhoneNumber = '070-3333-4444';
     const newAddress1 = 'newAddress1';
@@ -47,18 +65,20 @@ describe('changeOrderService', () => {
     // When
     const changeOrderService = new ChangeOrderService(stubRepo);
     const newShippingInfo = new ShippingInfo({
+      message: newShippingMessage,
+      address: new Address({
+        shippingMessage: newShippingMessage,
+        shippingAddress1: newAddress1,
+        shippingAddress2: newAddress2,
+        shippingZipCode: newZipCode,
+      }),
       receiver: new Receiver({
         name: newReceiverName,
         phoneNumber: newReceiverPhoneNumber,
       }),
-      address: new Address({
-        address1: newAddress1,
-        address2: newAddress2,
-        zipCode: newZipCode,
-      }),
     });
     await changeOrderService.changeShippingInfo(
-      new OrderNo(id),
+      new OrderNo(orderId),
       newShippingInfo,
     );
 

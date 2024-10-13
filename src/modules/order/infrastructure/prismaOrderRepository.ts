@@ -4,6 +4,7 @@ import { OrderNo } from '../domain/orderNo';
 import { OrderRepository } from '../domain/orderRepository';
 import { PrismaClientService } from 'src/modules/common/prismaClient.service';
 import { Optional } from 'typescript-optional';
+import { OrderFactory } from '../domain/orderFactory';
 
 @Injectable()
 export class PrismaOrderRepository implements OrderRepository {
@@ -15,20 +16,23 @@ export class PrismaOrderRepository implements OrderRepository {
         id: id.value,
       },
     });
-    return Optional.ofNullable(new Order(foundOrder));
+    return Optional.ofNullable(OrderFactory.createOrder(foundOrder));
   };
 
   save = async (order: Order): Promise<void> => {
     await this.prismaClient.client.order.create({
       data: {
+        ordererId: order.getOrderer().getMemberId().value,
+        ordererName: order.getOrderer().getName(),
         receiverName: order.getShippingInfo().getReceiver().getName(),
         receiverPhoneNumber: order
           .getShippingInfo()
           .getReceiver()
           .getPhoneNumber(),
-        address1: order.getShippingInfo().getAddress().getAddress1(),
-        address2: order.getShippingInfo().getAddress().getAddress2(),
-        zipCode: order.getShippingInfo().getAddress().getZipCode(),
+        shippingMessage: order.getShippingInfo().getMessage(),
+        shippingAddress1: order.getShippingInfo().getAddress().getAddress1(),
+        shippingAddress2: order.getShippingInfo().getAddress().getAddress2(),
+        shippingZipCode: order.getShippingInfo().getAddress().getZipCode(),
       },
     });
   };
@@ -39,14 +43,17 @@ export class PrismaOrderRepository implements OrderRepository {
         id: order.orderNo.value,
       },
       data: {
+        ordererId: order.getOrderer().getMemberId().value,
+        ordererName: order.getOrderer().getName(),
         receiverName: order.getShippingInfo().getReceiver().getName(),
         receiverPhoneNumber: order
           .getShippingInfo()
           .getReceiver()
           .getPhoneNumber(),
-        address1: order.getShippingInfo().getAddress().getAddress1(),
-        address2: order.getShippingInfo().getAddress().getAddress2(),
-        zipCode: order.getShippingInfo().getAddress().getZipCode(),
+        shippingMessage: order.getShippingInfo().getMessage(),
+        shippingAddress1: order.getShippingInfo().getAddress().getAddress1(),
+        shippingAddress2: order.getShippingInfo().getAddress().getAddress2(),
+        shippingZipCode: order.getShippingInfo().getAddress().getZipCode(),
       },
     });
   };

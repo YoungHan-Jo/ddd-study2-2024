@@ -15,9 +15,12 @@ datasource db {
 
 model Order {
   id                  String @id @default(uuid())
-  receiverName        String
-  receiverPhoneNumber String
-  address1            String
-  address2            String
-  zipCode             String
+  ordererId           String @map("orderer_id")
+  ordererName         String @map("orderer_name")
+  shippingMessage     String @map("shipping_message")
+  shippingAddress1    String @map("shipping_address1")
+  shippingAddress2    String @map("shipping_address2")
+  shippingZipCode     String @map("shipping_zip_code")
+  receiverName        String @map("receiver_name")
+  receiverPhoneNumber String @map("receiver_phone_number")
 }

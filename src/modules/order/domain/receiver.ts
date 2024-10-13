@@ -2,9 +2,9 @@ export class Receiver {
   private name: string;
   private phoneNumber: string;
 
-  constructor({ name, phoneNumber }: { name: string; phoneNumber: string }) {
-    this.name = name;
-    this.phoneNumber = phoneNumber;
+  constructor(receiver: { name: string; phoneNumber: string }) {
+    this.name = receiver.name;
+    this.phoneNumber = receiver.phoneNumber;
   }
 
   equals(other: Object) {

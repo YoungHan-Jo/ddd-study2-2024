@@ -1,26 +1,29 @@
+import { Orderer } from './orderer';
 import { OrderNo } from './orderNo';
-import { Receiver } from './receiver';
 import { ShippingInfo } from './shippingInfo';
-import { Order as PrismaOrder } from '@prisma/client';
 
 export class Order {
   private id: OrderNo;
+  private orderer: Orderer;
   private shippingInfo: ShippingInfo;
 
   constructor(order: {
     id: string;
-    receiverName: string;
-    receiverPhoneNumber: string;
-    address1: string;
-    address2: string;
-    zipCode: string;
+    orderer: Orderer;
+    shippingInfo: ShippingInfo;
   }) {
     this.id = new OrderNo(order.id);
+    this.orderer = order.orderer;
+    this.shippingInfo = order.shippingInfo;
   }
 
   get orderNo(): OrderNo {
     return this.id;
   }
+
+  getOrderer = (): Orderer => {
+    return this.orderer;
+  };
 
   getShippingInfo = (): ShippingInfo => {
     return this.shippingInfo;
